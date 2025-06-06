@@ -33,5 +33,5 @@ How to Run:
 **Open: http://localhost:5000/**
 
 Use Case:
-
+Can be pluginned in any website for use.
 Ideal for small websites or businesses needing automated FAQ support.
