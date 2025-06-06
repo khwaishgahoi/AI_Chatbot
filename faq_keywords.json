@@ -1,0 +1,103 @@
+{
+  "booking": {
+    "keywords": [
+      "book",
+      "booking",
+      "reservation",
+      "reserve",
+      "stay",
+      "availability"
+    ],
+    "response": "You can book your stay directly on our website here: https://hotelmoksha.in/book-now. For monthly stays, full payment is required at booking. For shorter stays, payment for the first night is needed."
+  },
+  "payment": {
+    "keywords": [
+      "payment",
+      "credit card",
+      "card",
+      "advance",
+      "surcharge",
+      "pay",
+      "billing"
+    ],
+    "response": "Credit card payments have a 2% surcharge. Full payment is needed for monthly stays. First night\u2019s payment is required for shorter stays."
+  },
+  "cancellation": {
+    "keywords": [
+      "cancel",
+      "cancellation",
+      "refund",
+      "reschedule"
+    ],
+    "response": "You can cancel your booking up to 3 days before check-in for a full refund. After that, charges may apply."
+  },
+  "checkin": {
+    "keywords": [
+      "check-in",
+      "checkin",
+      "arrival",
+      "early check-in",
+      "early checkin"
+    ],
+    "response": "Check-in time is from 1:00 PM. Early check-in is subject to availability and may incur extra charges."
+  },
+  "checkout": {
+    "keywords": [
+      "check-out",
+      "checkout",
+      "late checkout",
+      "late check-out",
+      "departure"
+    ],
+    "response": "Check-out is at 11:00 AM. Late check-out costs \u20b9500 for 1 hour, \u20b91000 for 2 hours, and 50% of the room rate beyond 2 hours."
+  },
+  "parking": {
+    "keywords": [
+      "parking",
+      "car",
+      "vehicle",
+      "bus",
+      "tempo",
+      "park"
+    ],
+    "response": "Limited parking for 8\u201310 cars is available. Larger vehicles can be parked nearby at the guest's own arrangement."
+  },
+  "smoking": {
+    "keywords": [
+      "smoking",
+      "smoke",
+      "cigarette"
+    ],
+    "response": "Smoking is strictly prohibited inside rooms. Designated outdoor smoking areas are available."
+  },
+  "alcohol": {
+    "keywords": [
+      "alcohol",
+      "liquor",
+      "drink",
+      "beer",
+      "wine",
+      "bar"
+    ],
+    "response": "Alcohol consumption is not allowed in rooms or hotel premises. The hotel does not sell or serve alcohol."
+  },
+  "id": {
+    "keywords": [
+      "id",
+      "identity",
+      "proof",
+      "passport",
+      "aadhaar"
+    ],
+    "response": "All guests must present a valid photo ID at check-in. Visitors must leave by 9:00 PM."
+  },
+  "pets": {
+    "keywords": [
+      "pets",
+      "dog",
+      "cat",
+      "animal"
+    ],
+    "response": "Pets are allowed only with prior approval. Unapproved pets may result in booking cancellation."
+  }
+}

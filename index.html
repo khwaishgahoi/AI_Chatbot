@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MokshaBot Chatbot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    #chatbot-icon {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+      z-index: 9999;
+      background: url('https://cdn-icons-png.flaticon.com/512/8943/8943377.png') no-repeat center center;
+      background-size: contain;
+    }
+
+    #chat-container {
+      position: fixed;
+      bottom: 110px;
+      right: 20px;
+      width: 320px;
+      max-height: 450px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 9998;
+    }
+
+    #chat-header {
+      background-color: #28a745;
+      color: white;
+      padding: 10px 15px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    #chat-messages {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      background-color: #f4f6f9;
+    }
+
+    .message {
+      margin-bottom: 12px;
+      max-width: 80%;
+      padding: 8px 12px;
+      border-radius: 15px;
+      line-height: 1.3;
+    }
+
+    .bot-message {
+      background-color: #e1eaff;
+      color: #1a237e;
+      align-self: flex-start;
+    }
+
+    .user-message {
+      background-color:  #28a745;
+      color: white;
+      align-self: flex-end;
+    }
+
+    #common-questions {
+      margin-top: 10px;
+    }
+
+    .common-question {
+      background-color: #fff;
+      border: 1px solid  #28a745;
+      color:  #28a745;
+      padding: 8px 12px;
+      border-radius: 20px;
+      margin-bottom: 6px;
+      cursor: pointer;
+      user-select: none;
+      font-size: 14px;
+      transition: background-color 0.2s, color 0.2s;
+      max-width: fit-content;
+    }
+
+    .common-question:hover {
+      background-color:  #28a745;
+      color: white;
+    }
+
+    #input-area {
+      display: flex;
+      border-top: 1px solid #ddd;
+    }
+
+    #user-input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      font-size: 16px;
+    }
+
+    #send-btn {
+      background-color:  #28a745;
+      border: none;
+      color: white;
+      padding: 0 20px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    #send-btn:disabled {
+      background-color: #aaa;
+      cursor: not-allowed;
+    }
+
+   #go-back-btn {
+  border: 1px solid #28a745;
+  background-color: white;
+  color: #28a745;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 10px;
+  width: fit-content;
+  user-select: none;
+  transition: background-color 0.2s, color 0.2s;
+  max-width: fit-content;
+}
+
+#go-back-btn:hover {
+  background-color: #28a745;
+  color: white;
+}
+  </style>
+</head>
+<body>
+
+<div id="chatbot-icon" title="Chat with MokshaBot" aria-label="Open chat"></div>
+
+<div id="chat-container" role="region" aria-label="Chat with MokshaBot">
+  <div id="chat-header">MokshaBot</div>
+  <div id="chat-messages"></div>
+  <div id="common-questions"></div>
+  <button id="go-back-btn" style="display:none;">Go Back to Main Menu</button>
+  <div id="input-area">
+    <input type="text" id="user-input" placeholder="Type your message here..." autocomplete="off" />
+    <button id="send-btn" disabled>➤</button>
+  </div>
+</div>
+
+<script>
+  const chatbotIcon = document.getElementById('chatbot-icon');
+  const chatContainer = document.getElementById('chat-container');
+  const chatMessages = document.getElementById('chat-messages');
+  const commonQuestionsDiv = document.getElementById('common-questions');
+  const userInput = document.getElementById('user-input');
+  const sendBtn = document.getElementById('send-btn');
+  const goBackBtn = document.getElementById('go-back-btn');
+
+  const commonQuestions = [
+    { question: "Booking details", answer: "You can book directly on our website at https://live.ipms247.com/booking/book-rooms-hotelmoksha or contact us at +91 9557053066." },
+    { question: "Payment options", answer: "We accept credit cards, debit cards, UPI, and cash payments at the hotel." },
+    { question: "Parking related query", answer: "We have limited parking for 8-10 cars on-site. Larger vehicles can park nearby at your own expense." },
+    { question: "Check-in and check-out times", answer: "Check-in is at 1:00 PM and check-out is at 11:00 AM." },
+    { question: "Food and dining", answer: "Breakfast is served from 8:00 AM to 10:00 AM. Last restaurant order is at 9:00 PM. Extra breakfast costs ₹250." },
+    { question: "Others", answer: null }
+  ];
+
+  chatbotIcon.addEventListener('click', () => {
+    if (chatContainer.style.display === 'flex') {
+      chatContainer.style.display = 'none';
+    } else {
+      chatContainer.style.display = 'flex';
+      userInput.focus();
+      if (chatMessages.children.length === 0) {
+        startChat();
+      }
+    }
+  });
+
+  userInput.addEventListener('input', () => {
+    sendBtn.disabled = userInput.value.trim() === "";
+  });
+
+  sendBtn.addEventListener('click', sendUserMessage);
+  userInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !sendBtn.disabled) {
+      sendUserMessage();
+    }
+  });
+
+  goBackBtn.addEventListener('click', () => {
+    goBackBtn.style.display = 'none';
+    addMessage("Hi! I am MokshaBot! How may I assist you today?", 'bot');
+    showCommonQuestions();
+  });
+
+  function addMessage(text, sender = 'bot') {
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('message');
+    msgDiv.classList.add(sender === 'bot' ? 'bot-message' : 'user-message');
+    msgDiv.textContent = text;
+    chatMessages.appendChild(msgDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function showCommonQuestions() {
+    commonQuestionsDiv.innerHTML = '';
+    commonQuestions.forEach(({ question }) => {
+      const qDiv = document.createElement('div');
+      qDiv.textContent = question;
+      qDiv.classList.add('common-question');
+      qDiv.addEventListener('click', () => handleCommonQuestionClick(question));
+      commonQuestionsDiv.appendChild(qDiv);
+    });
+  }
+
+  function removeCommonQuestions() {
+    commonQuestionsDiv.innerHTML = '';
+  }
+
+  function handleCommonQuestionClick(question) {
+    removeCommonQuestions();
+    addMessage(question, 'user');
+
+    const cq = commonQuestions.find(q => q.question === question);
+    if (!cq) return;
+
+    if (cq.answer) {
+      addMessage(cq.answer, 'bot');
+      goBackBtn.style.display = 'block';
+    } else {
+      addMessage("How may I assist you today?", 'bot');
+      goBackBtn.style.display = 'block';
+    }
+  }
+
+  function startChat() {
+    addMessage("Hi! I am MokshaBot! How may I assist you today?", 'bot');
+    showCommonQuestions();
+    goBackBtn.style.display = 'none';
+  }
+
+  function sendUserMessage() {
+    const msg = userInput.value.trim();
+    if (!msg) return;
+    addMessage(msg, 'user');
+    userInput.value = '';
+    sendBtn.disabled = true;
+
+    fetch("/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ message: msg }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        addMessage(data.response, 'bot');
+        // No showCommonQuestions here
+      })
+      .catch((err) => {
+        console.error("Error:", err);
+        addMessage("Sorry, something went wrong. Please try again.", 'bot');
+      });
+  }
+</script>
+
+</body>
+</html>
