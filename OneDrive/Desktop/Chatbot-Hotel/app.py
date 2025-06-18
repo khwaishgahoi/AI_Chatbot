@@ -1,5 +1,4 @@
-
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_file
 import json
 
 app = Flask(__name__)
@@ -19,7 +18,6 @@ suggested_responses = {
 # ✅ Keyword-based answer matching
 def find_answer(user_message):
     user_message = user_message.lower()
-
     for topic, content in faq_data.items():
         for keyword in content['keywords']:
             if keyword.lower() in user_message:
@@ -32,36 +30,26 @@ def chat():
     data = request.json
     message = data.get("message", "").lower()
 
-    # Check if it's one of the suggested questions
     for q, response in suggested_responses.items():
         if message == q.lower():
             return jsonify({"response": response})
 
-    # Check for keyword matches in JSON
     answer = find_answer(message)
     if answer:
         return jsonify({"response": answer})
 
-    # Greetings fallback
     greetings = ['hi', 'hello', 'hey']
     if any(greet in message for greet in greetings):
         return jsonify({"response": "Hi there! How may I assist you today?"})
 
-    # Final fallback
     return jsonify({"response": "I'm sorry, I don't have an answer to that yet. Could you please rephrase?"})
 
 # ✅ Serve index.html when opened from browser
-@app.route("/")
+@app.route('/')
 def home():
-    return send_from_directory('.', 'index.html')
+    return send_file('index.html')
 
 # ✅ GET endpoint to fetch suggested questions
-# @app.route("/suggested-questions", methods=["GET"])
-# def suggested_questions():
-#     return jsonify([
-#         {"question": q} for q in suggested_responses.keys()
-#     ])
-
 @app.route("/suggested-questions", methods=["GET"])
 def suggested_questions():
     suggestions = [
@@ -72,8 +60,6 @@ def suggested_questions():
     ]
     return jsonify(suggestions)
 
-
 # ✅ Run the app
 if __name__ == "__main__":
     app.run(debug=True)
-
