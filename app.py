@@ -51,9 +51,9 @@ def chat():
     return jsonify({"response": "I'm sorry, I don't have an answer to that yet. Could you please rephrase?"})
 
 # ✅ Serve index.html when opened from browser
-@app.route("/")
+@app.route('/')
 def home():
-    return send_from_directory('.', 'index.html')
+    return send_file('index.html')
 
 # ✅ GET endpoint to fetch suggested questions
 # @app.route("/suggested-questions", methods=["GET"])
